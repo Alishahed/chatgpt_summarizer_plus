@@ -4,7 +4,8 @@ from dotenv import load_dotenv
 from google.oauth2 import service_account
 from google.cloud import storage
 import streamlit as st
-from app_util import save_uploadedfile,delete_file
+from app_util import save_uploadedfile,delete_file,tag_visible,text_from_html
+import urllib.request
 import uuid
 
 
@@ -22,10 +23,10 @@ client = storage.Client(credentials=credentials)
 
 with st.sidebar:
     st.title('Article Summarizer+')
-    pdf_file = st.file_uploader("Upload .pdf", type=['pdf'])
+    pdf_file = st.file_uploader("Upload your .pdf file", type=['pdf'])
     st.subheader("OR")
-    article_url = st.text_input('Enter the Article URL here')
-if pdf_file is not None:
+    article_url = st.text_input('Enter the web URL here (alpha version)')
+if pdf_file:
     txt_file_name = str(uuid.uuid4())+".txt"
     file_details = {"FileName":pdf_file.name,"FileType":pdf_file.type}
     save_uploadedfile(pdf_file)
@@ -40,9 +41,15 @@ if pdf_file is not None:
     input_string_cut = input_string[:max_token]
     delete_file(f'tempDir/tempfile.txt')
     delete_file(f'tempDir/{pdf_file.name}')
-else:
-    input_string_cut = article_url
+elif article_url:
+    html = urllib.request.urlopen(article_url).read()
+    input_string = text_from_html(html)
+    input_string_cut = input_string[:max_token]
+    #input_string_cut = article_url
     #pass
+else:
+    input_string_cut = ""
+
 
 if input_string_cut:
     response_summary = openai.ChatCompletion.create(
@@ -59,3 +66,6 @@ if input_string_cut:
     )
 
     st.write(response_summary.choices[0].message.content)
+else:
+    st.title("Welcome to my app!")
+    st.markdown("This app has two pages *gpt_summarizer* and *code_explainer*. Choose one of the pages and enjoy!")
