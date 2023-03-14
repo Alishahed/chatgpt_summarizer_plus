@@ -52,7 +52,8 @@ if auth_url:
                                             input_string_cut +'\n'+
                                             st.secrets['chatgpt_queries']['summarizer_query2'] +
                                             st.secrets['chatgpt_queries']['summarizer_query3'] +
-                                            st.secrets['chatgpt_queries']['summarizer_query4']}
+                                            st.secrets['chatgpt_queries']['summarizer_query4']
+                                            }
     ],
     max_tokens = max_token
     )
