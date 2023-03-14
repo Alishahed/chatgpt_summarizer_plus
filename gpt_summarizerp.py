@@ -41,7 +41,7 @@ if pdf_file is not None:
     delete_file(f'tempDir/tempfile.txt')
     delete_file(f'tempDir/{pdf_file.name}')
 else:
-    auth_url = article_url
+    input_string_cut = article_url
     #pass
 
 if auth_url:
