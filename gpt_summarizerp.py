@@ -44,7 +44,7 @@ else:
     input_string_cut = article_url
     #pass
 
-if auth_url:
+if input_string_cut:
     response_summary = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=[
