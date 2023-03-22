@@ -13,11 +13,11 @@ def pdf_to_text(uploadedfile):
     output_txt = extract_text(os.path.join("tempDir",uploadedfile.name),"r")
     return output_txt
 
-def save_uploadedfile(uploadedfile):
+def save_uploadedfile(uploadedfile,text_file_name):
     with open(os.path.join("tempDir",uploadedfile.name),"wb") as f:
         f.write(uploadedfile.getbuffer())
     text_string = pdf_to_text(uploadedfile)
-    with open(os.path.join("tempDir","tempfile.txt"),"w") as f:
+    with open(os.path.join("tempDir",f"{text_file_name}"),"w") as f:
         f.write(text_string)
         f.close()
     return st.success("Uploading and processing File:{}".format(uploadedfile.name))

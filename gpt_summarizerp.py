@@ -29,17 +29,17 @@ with st.sidebar:
 if pdf_file:
     txt_file_name = str(uuid.uuid4())+".txt"
     file_details = {"FileName":pdf_file.name,"FileType":pdf_file.type}
-    save_uploadedfile(pdf_file)
+    save_uploadedfile(pdf_file,txt_file_name)
     bucket_name = client.bucket("summarization_chatgpt")
     object_name_in_gcs_bucket = bucket_name.blob(txt_file_name)
-    object_name_in_gcs_bucket.upload_from_filename(f'tempDir/tempfile.txt')
+    object_name_in_gcs_bucket.upload_from_filename(f'tempDir/{txt_file_name}')
 
     #object_name_in_gcs_bucket = bucket_name.blob(pdf_file.name)
     #object_name_in_gcs_bucket.upload_from_filename(f'tempDir/{pdf_file.name}')
     auth_url = f'https://storage.cloud.google.com/summarization_chatgpt/{txt_file_name}'
     input_string = object_name_in_gcs_bucket.download_as_text()
     input_string_cut = input_string[:max_token]
-    delete_file(f'tempDir/tempfile.txt')
+    delete_file(f'tempDir/{txt_file_name}')
     delete_file(f'tempDir/{pdf_file.name}')
 elif article_url:
     html = urllib.request.urlopen(article_url).read()
