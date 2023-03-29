@@ -24,6 +24,7 @@ client = storage.Client(credentials=credentials)
 with st.sidebar:
     st.title('Article Summarizer+')
     pdf_file = st.file_uploader("Upload your .pdf file", type=['pdf'])
+    summ_temprature = st.slider("Temprature (0: deterministic,1: creative)", min_value=0.0, max_value=1.0, value=0.8, step=0.1)
     st.subheader("OR")
     article_url = st.text_input('Enter the web URL here (alpha version)')
 if pdf_file:
@@ -62,7 +63,8 @@ if input_string_cut:
                                             st.secrets['chatgpt_queries']['summarizer_query4']
                                             }
     ],
-    max_tokens = max_token
+    max_tokens = max_token,
+    temperature = summ_temprature,
     )
 
     st.write(response_summary.choices[0].message.content)
